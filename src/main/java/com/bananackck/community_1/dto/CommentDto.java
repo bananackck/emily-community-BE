@@ -11,5 +11,6 @@ public class CommentDto {
     private String text;
     private LocalDateTime createdAt;
     private String userNickname;
+    private String userProfileImg;
     // 필요한 다른 필드들
 }
