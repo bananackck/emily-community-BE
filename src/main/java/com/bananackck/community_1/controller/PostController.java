@@ -1,14 +1,16 @@
 package com.bananackck.community_1.controller;
 
+import com.bananackck.community_1.dto.CreatePostRequestDto;
 import com.bananackck.community_1.dto.PostDetailDto;
 import com.bananackck.community_1.dto.PostDto;
 import com.bananackck.community_1.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/posts")
@@ -29,14 +31,19 @@ public class PostController {
         return ResponseEntity.ok(detailDto);
     }
 
+    //post api
     @PostMapping
-    public ResponseEntity<Map<String, Object>> create(@RequestBody Map<String, String> payload) {
-//        String title = payload.get("title");
-//        String text = payload.get("text");
-        Map<String, Object> response = Map.of("message", "Post created successfully", "post", payload);
-        return ResponseEntity.ok(response);
-//        return ResponseEntity.of(HttpStatus.CREATED, "ok");
+    public ResponseEntity<PostDto> createPost(@RequestBody CreatePostRequestDto request) {
+        PostDto created = postService.createPost(request);
 
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(created.getId())
+                .toUri();
+
+        return ResponseEntity.created(location).body(created);
     }
+
 }
 
