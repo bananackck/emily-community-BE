@@ -1,6 +1,7 @@
 package com.bananackck.community_1._feature.post.entity;
 
 import com.bananackck.community_1._feature.comment.Comment;
+import com.bananackck.community_1._feature.postlike.entity.PostLike;
 import com.bananackck.community_1._feature.user.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;

@@ -29,8 +29,11 @@ public class PostController {
 
     //특정 id 게시물 조회 api
     @GetMapping("/{postId}")
-    public ResponseEntity<PostDetailDto> getPostDetail(@PathVariable Long postId) {
-        PostDetailDto detailDto = postService.findDetailById(postId);
+    public ResponseEntity<PostDetailDto> getPostDetail(
+            @PathVariable Long postId,
+            @AuthenticationPrincipal Jwt jwt) {
+        long userId = Long.parseLong(jwt.getSubject());
+        PostDetailDto detailDto = postService.findDetailById(postId, userId);
         return ResponseEntity.ok(detailDto);
     }
 

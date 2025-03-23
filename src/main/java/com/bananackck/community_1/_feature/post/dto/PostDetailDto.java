@@ -17,6 +17,7 @@ public class PostDetailDto {
     private Long viewCount;
 
     private Long likeCount;
+    private boolean isLiked;
 
     private Long commentCount;
 

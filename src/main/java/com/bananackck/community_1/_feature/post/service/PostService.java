@@ -8,7 +8,7 @@ import com.bananackck.community_1._feature.post.dto.UpdatePostRequestDto;
 import com.bananackck.community_1._feature.post.entity.Post;
 import com.bananackck.community_1._feature.user.User;
 import com.bananackck.community_1._feature.comment.CommentRepository;
-import com.bananackck.community_1._feature.post.repository.PostLikeRepository;
+import com.bananackck.community_1._feature.postlike.PostLikeRepository;
 import com.bananackck.community_1._feature.post.repository.PostRepository;
 import com.bananackck.community_1._feature.user.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -51,7 +51,7 @@ public class PostService {
     }
 
     @Transactional
-    public PostDetailDto findDetailById(long postId) {
+    public PostDetailDto findDetailById(long postId, long userId) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new EntityNotFoundException("Post not found with id=" + postId));
 
@@ -68,6 +68,7 @@ public class PostService {
                         .build()
         ).collect(Collectors.toList());
 
+        boolean liked = postLikeRepository.existsByUserIdAndPostId(userId, postId);
         return PostDetailDto.builder()
                 .id(post.getId())
                 .title(post.getTitle())
@@ -75,6 +76,7 @@ public class PostService {
                 .createdAt(post.getCreatedAt())
                 .viewCount(post.getViewCount() != null ? post.getViewCount() : 0L)
                 .likeCount(likeCount)
+                .isLiked(liked)
                 .commentCount((long) commentDtos.size())
                 .userNickname(post.getUser() != null ? post.getUser().getNickname() : null)
                 .userProfileImg(post.getUser() != null ? post.getUser().getProfilePicture() : null)
