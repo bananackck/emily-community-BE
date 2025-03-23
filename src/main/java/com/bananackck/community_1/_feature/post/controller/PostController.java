@@ -53,15 +53,19 @@ public class PostController {
 
     //게시물 수정
     @PatchMapping("/{postId}")
-    public ResponseEntity<PostDto> update(@PathVariable Long postId, @RequestBody UpdatePostRequestDto request) {
-        PostDto updated = postService.updatePost(postId, request);
+    public ResponseEntity<PostDto> updatePost(
+            @PathVariable Long postId,
+            @RequestBody UpdatePostRequestDto request,
+            @AuthenticationPrincipal Jwt jwt) {
+        Long userId = Long.valueOf(jwt.getSubject());
+        PostDto updated = postService.updatePost(postId, userId, request);
 
         return ResponseEntity.ok(updated);
     }
 
     //게시물 삭제
     @DeleteMapping("/{postId}")
-    public ResponseEntity<Void> delete(
+    public ResponseEntity<Void> deletePost(
             @PathVariable Long postId,
             @AuthenticationPrincipal Jwt jwt) {
         Long userId = Long.valueOf(jwt.getSubject());

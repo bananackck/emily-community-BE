@@ -118,9 +118,12 @@ public class PostService {
 
     //게시물 수정
     @Transactional
-    public PostDto updatePost(Long postId, UpdatePostRequestDto req) {
+    public PostDto updatePost(Long postId, Long userId, UpdatePostRequestDto req) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new EntityNotFoundException("Post not found with id=" + postId));
+        if(!Objects.equals(post.getUser().getId(), userId)){
+            throw new IllegalArgumentException("User is not the owner of the post");
+        }
 
         if (req.getTitle() != null) post.setTitle(req.getTitle());
         if (req.getText() != null) post.setText(req.getText());
