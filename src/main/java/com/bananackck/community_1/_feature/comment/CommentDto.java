@@ -12,5 +12,14 @@ public class CommentDto {
     private LocalDateTime createdAt;
     private String userNickname;
     private String userProfileImg;
-    // 필요한 다른 필드들
+
+    public static CommentDto fromEntity(Comment comment) {
+        return CommentDto.builder()
+                .id(comment.getId())
+                .text(comment.getText())
+                .createdAt(comment.getCreatedAt())
+                .userNickname(comment.getUser() != null ? comment.getUser().getNickname() : null)
+                .userProfileImg(comment.getUser() != null ? comment.getUser().getProfilePicture() : null)
+                .build();
+    }
 }
