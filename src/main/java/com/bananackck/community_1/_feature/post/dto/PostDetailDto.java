@@ -22,5 +22,5 @@ public class PostDetailDto {
 
     private String userNickname;
     private String userProfileImg;
-    private List<CommentDto> comments;
+    private List<CommentDto.ViewCommentDto> comments;
 }

@@ -58,8 +58,8 @@ public class PostService {
         long likeCount = postLikeRepository.countByPostId(post.getId());
 
         // comment 리스트
-        List<CommentDto> commentDtos = post.getComments().stream().map(comment ->
-                CommentDto.builder()
+        List<CommentDto.ViewCommentDto> commentDtos = post.getComments().stream().map(comment ->
+                CommentDto.ViewCommentDto.builder()
 //                        .id(comment.getId())
                         .text(comment.getText())
                         .createdAt(comment.getCreatedAt())

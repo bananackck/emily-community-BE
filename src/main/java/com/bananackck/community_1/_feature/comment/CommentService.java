@@ -20,33 +20,30 @@ public class CommentService {
     private final UserRepository userRepository;
     private final PostRepository postRepository;
 
-    public List<CommentDto> findAllByPostId(Long postId) {
+    //댓글 조회
+    public List<CommentDto.ViewCommentDto> findAllByPostId(Long postId) {
         return commentRepository.findAllByPostId(postId)
                 .stream()
                 .map(CommentDto::fromEntity)
                 .collect(Collectors.toList());
     }
 
+    //댓글 생성
     @Transactional
-    public CommentDto createComment(CommentDto req, Long postId, Long userId) {
+    public CommentDto.ViewCommentDto createComment(CommentDto.CreateCommentDto req, Long postId, Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found: " + userId));
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new EntityNotFoundException("Post not found with id=" + postId));
 
         Comment comment = Comment.builder()
+                .post(post)
                 .user(user)
                 .text(req.getText())
                 .createdAt(LocalDateTime.now())
-                .post(post)
                 .build();
-        commentRepository.save(comment);
 
-        return CommentDto.builder()
-                .text(comment.getText())
-                .createdAt(comment.getCreatedAt())
-                .userNickname(user.getNickname())
-                .userProfileImg(user.getProfilePicture())
-                .build();
+        Comment saved = commentRepository.save(comment);
+        return CommentDto.fromEntity(saved);
     }
 }
