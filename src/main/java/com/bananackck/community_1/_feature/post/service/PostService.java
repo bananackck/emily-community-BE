@@ -1,15 +1,15 @@
-package com.bananackck.community_1.service;
+package com.bananackck.community_1._feature.post.service;
 
-import com.bananackck.community_1.dto.CommentDto;
-import com.bananackck.community_1.dto.CreatePostRequestDto;
-import com.bananackck.community_1.dto.PostDetailDto;
-import com.bananackck.community_1.dto.PostDto;
-import com.bananackck.community_1.entity.Post;
-import com.bananackck.community_1.entity.User;
-import com.bananackck.community_1.repository.CommentRepository;
-import com.bananackck.community_1.repository.PostLikeRepository;
-import com.bananackck.community_1.repository.PostRepository;
-import com.bananackck.community_1.repository.UserRepository;
+import com.bananackck.community_1._feature.post.dto.CommentDto;
+import com.bananackck.community_1._feature.post.dto.CreatePostRequestDto;
+import com.bananackck.community_1._feature.post.dto.PostDetailDto;
+import com.bananackck.community_1._feature.post.dto.PostDto;
+import com.bananackck.community_1._feature.post.entity.Post;
+import com.bananackck.community_1._feature.user.User;
+import com.bananackck.community_1._feature.post.repository.CommentRepository;
+import com.bananackck.community_1._feature.post.repository.PostLikeRepository;
+import com.bananackck.community_1._feature.post.repository.PostRepository;
+import com.bananackck.community_1._feature.user.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

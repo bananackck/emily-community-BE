@@ -1,6 +1,6 @@
-package com.bananackck.community_1.repository;
+package com.bananackck.community_1._feature.post.repository;
 
-import com.bananackck.community_1.entity.Post;
+import com.bananackck.community_1._feature.post.entity.Post;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

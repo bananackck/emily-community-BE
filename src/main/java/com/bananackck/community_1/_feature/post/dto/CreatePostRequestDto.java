@@ -1,4 +1,4 @@
-package com.bananackck.community_1.dto;
+package com.bananackck.community_1._feature.post.dto;
 
 import lombok.Data;
 
@@ -7,4 +7,5 @@ public class CreatePostRequestDto {
     private String title;
     private String text;
     private Long userId;
+    private String img;
 }

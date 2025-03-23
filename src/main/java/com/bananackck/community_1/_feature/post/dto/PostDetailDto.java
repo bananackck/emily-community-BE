@@ -1,14 +1,13 @@
-package com.bananackck.community_1.dto;
+package com.bananackck.community_1._feature.post.dto;
 
 import lombok.Builder;
 import lombok.Data;
-
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
 @Builder
-public class PostDto {
+public class PostDetailDto {
     private Long id;
     private String title;
     private String text;
@@ -20,6 +19,7 @@ public class PostDto {
 
     private Long commentCount;
 
-    private String userProfileImg; //연관된 User의 프사.
-    private String userNickname; // 연관된 User의 닉네임
+    private String userNickname;
+    private String userProfileImg;
+    private List<CommentDto> comments;
 }

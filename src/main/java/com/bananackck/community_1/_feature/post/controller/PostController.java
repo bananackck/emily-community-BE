@@ -1,16 +1,16 @@
-package com.bananackck.community_1.controller;
+package com.bananackck.community_1._feature.post.controller;
 
-import com.bananackck.community_1.dto.CreatePostRequestDto;
-import com.bananackck.community_1.dto.PostDetailDto;
-import com.bananackck.community_1.dto.PostDto;
-import com.bananackck.community_1.service.PostService;
+import com.bananackck.community_1._feature.post.dto.CreatePostRequestDto;
+import com.bananackck.community_1._feature.post.dto.PostDetailDto;
+import com.bananackck.community_1._feature.post.dto.PostDto;
+import com.bananackck.community_1._feature.post.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.util.List;
+//import java.util.List;
 
 @RestController
 @RequestMapping("/api/posts")
@@ -20,7 +20,7 @@ public class PostController {
 
     //모든 게시물 조회 api
     @GetMapping
-    public List<PostDto> findAll() {
+    public java.util.List<PostDto> findAll() {
         return postService.findAll();
     }
 
@@ -31,7 +31,7 @@ public class PostController {
         return ResponseEntity.ok(detailDto);
     }
 
-    //post api
+    //게시물 생성
     @PostMapping
     public ResponseEntity<PostDto> createPost(@RequestBody CreatePostRequestDto request) {
         PostDto created = postService.createPost(request);
@@ -45,5 +45,10 @@ public class PostController {
         return ResponseEntity.created(location).body(created);
     }
 
-}
+    @PatchMapping("/{postId}")
+    public ResponseEntity<PostDto> updatePost(@PathVariable Long postId, @RequestBody CreatePostRequestDto request) {
+        PostDto updated = postService.createPost(request);
 
+        return ResponseEntity.ok(updated);
+    }
+}

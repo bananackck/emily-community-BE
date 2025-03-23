@@ -1,4 +1,4 @@
-package com.bananackck.community_1.entity;
+package com.bananackck.community_1._feature.post.entity;
 
 import jakarta.persistence.Embeddable;
 import java.io.Serializable;

@@ -1,4 +1,4 @@
-package com.bananackck.community_1.dto;
+package com.bananackck.community_1._feature.post.dto;
 
 import lombok.Builder;
 import lombok.Data;

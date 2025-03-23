@@ -1,6 +1,5 @@
-package com.bananackck.community_1.repository;
+package com.bananackck.community_1._feature.user;
 
-import com.bananackck.community_1.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

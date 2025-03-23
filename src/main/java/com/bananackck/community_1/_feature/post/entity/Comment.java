@@ -1,10 +1,10 @@
-package com.bananackck.community_1.entity;
+package com.bananackck.community_1._feature.post.entity;
 
+import com.bananackck.community_1._feature.user.User;
 import jakarta.persistence.*;
 import lombok.Data;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.time.LocalDateTime;
-import java.util.Set;
 
 @Data
 @Entity
