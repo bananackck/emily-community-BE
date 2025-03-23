@@ -3,6 +3,7 @@ package com.bananackck.community_1._feature.post.controller;
 import com.bananackck.community_1._feature.post.dto.CreatePostRequestDto;
 import com.bananackck.community_1._feature.post.dto.PostDetailDto;
 import com.bananackck.community_1._feature.post.dto.PostDto;
+import com.bananackck.community_1._feature.post.dto.UpdatePostRequestDto;
 import com.bananackck.community_1._feature.post.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -10,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-//import java.util.List;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/posts")
@@ -20,7 +21,7 @@ public class PostController {
 
     //모든 게시물 조회 api
     @GetMapping
-    public java.util.List<PostDto> findAll() {
+    public List<PostDto> findAll() {
         return postService.findAll();
     }
 
@@ -45,9 +46,10 @@ public class PostController {
         return ResponseEntity.created(location).body(created);
     }
 
+    //게시물 수정
     @PatchMapping("/{postId}")
-    public ResponseEntity<PostDto> updatePost(@PathVariable Long postId, @RequestBody CreatePostRequestDto request) {
-        PostDto updated = postService.createPost(request);
+    public ResponseEntity<PostDto> update(@PathVariable Long postId, @RequestBody UpdatePostRequestDto request) {
+        PostDto updated = postService.updatePost(postId, request);
 
         return ResponseEntity.ok(updated);
     }

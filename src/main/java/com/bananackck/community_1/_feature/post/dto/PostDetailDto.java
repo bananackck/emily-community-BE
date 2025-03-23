@@ -1,5 +1,6 @@
 package com.bananackck.community_1._feature.post.dto;
 
+import com.bananackck.community_1._feature.comment.CommentDto;
 import lombok.Builder;
 import lombok.Data;
 import java.time.LocalDateTime;

@@ -1,12 +1,13 @@
 package com.bananackck.community_1._feature.post.service;
 
-import com.bananackck.community_1._feature.post.dto.CommentDto;
+import com.bananackck.community_1._feature.comment.CommentDto;
 import com.bananackck.community_1._feature.post.dto.CreatePostRequestDto;
 import com.bananackck.community_1._feature.post.dto.PostDetailDto;
 import com.bananackck.community_1._feature.post.dto.PostDto;
+import com.bananackck.community_1._feature.post.dto.UpdatePostRequestDto;
 import com.bananackck.community_1._feature.post.entity.Post;
 import com.bananackck.community_1._feature.user.User;
-import com.bananackck.community_1._feature.post.repository.CommentRepository;
+import com.bananackck.community_1._feature.comment.CommentRepository;
 import com.bananackck.community_1._feature.post.repository.PostLikeRepository;
 import com.bananackck.community_1._feature.post.repository.PostRepository;
 import com.bananackck.community_1._feature.user.UserRepository;
@@ -71,7 +72,7 @@ public class PostService {
                 .title(post.getTitle())
                 .text(post.getText())
                 .createdAt(post.getCreatedAt())
-                .viewCount(post.getViewCount() != null ? Long.valueOf(post.getViewCount()) : 0L)
+                .viewCount(post.getViewCount() != null ? post.getViewCount() : 0L)
                 .likeCount(likeCount)
                 .commentCount((long) commentDtos.size())
                 .userNickname(post.getUser() != null ? post.getUser().getNickname() : null)
@@ -110,6 +111,26 @@ public class PostService {
                 .commentCount(commentCount)
                 .userNickname(user.getNickname())
                 .userProfileImg(user.getProfilePicture())
+                .build();
+    }
+
+    //게시물 수정
+    @Transactional
+    public PostDto updatePost(Long postId, UpdatePostRequestDto req) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new EntityNotFoundException("Post not found with id=" + postId));
+
+        if (req.getTitle() != null) post.setTitle(req.getTitle());
+        if (req.getText() != null) post.setText(req.getText());
+        if (req.getImg() != null) post.setImg(req.getImg());
+
+        Post updated = postRepository.save(post);
+
+        return PostDto.builder()
+//                .id(updated.getId())
+                .title(updated.getTitle())
+                .text(updated.getText())
+                .img(updated.getImg())
                 .build();
     }
 
