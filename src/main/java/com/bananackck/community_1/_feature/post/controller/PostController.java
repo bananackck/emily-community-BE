@@ -36,8 +36,11 @@ public class PostController {
 
     //게시물 생성
     @PostMapping
-    public ResponseEntity<PostDto> createPost(@RequestBody CreatePostRequestDto request) {
-        PostDto created = postService.createPost(request);
+    public ResponseEntity<PostDto> createPost(
+            @RequestBody CreatePostRequestDto request,
+            @AuthenticationPrincipal Jwt jwt) {
+        Long userId = Long.valueOf(jwt.getSubject());
+        PostDto created = postService.createPost(request,userId);
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()

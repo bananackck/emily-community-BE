@@ -83,10 +83,11 @@ public class PostService {
     }
 
 
+    //게시글 생성
     @Transactional
-    public PostDto createPost(CreatePostRequestDto req) {
-        User user = userRepository.findById(req.getUserId())
-                .orElseThrow(() -> new EntityNotFoundException("User not found: " + req.getUserId()));
+    public PostDto createPost(CreatePostRequestDto req, Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found: " + userId));
 
         Post post = Post.builder()
                 .user(user)
