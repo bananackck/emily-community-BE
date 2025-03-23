@@ -41,6 +41,7 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
+
     @Bean
     public JwtDecoder jwtDecoder() {
         SecretKey key = Keys.hmacShaKeyFor(jwtSecret.getBytes());

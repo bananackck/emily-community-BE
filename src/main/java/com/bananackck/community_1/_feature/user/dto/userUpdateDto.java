@@ -1,4 +1,4 @@
-package com.bananackck.community_1._feature.user;
+package com.bananackck.community_1._feature.user.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

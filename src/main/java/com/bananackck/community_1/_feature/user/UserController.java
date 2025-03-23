@@ -1,6 +1,7 @@
 package com.bananackck.community_1._feature.user;
 
-import com.bananackck.community_1._feature.auth.UserPrincipal;
+import com.bananackck.community_1._feature.user.dto.changePasswordDto;
+import com.bananackck.community_1._feature.user.dto.userUpdateDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -25,6 +26,17 @@ public class UserController {
         long userId = Long.parseLong(jwt.getSubject());  // 토큰 sub → userId
         userUpdateDto updated = userService.updateProfile(userId, dto);
         return ResponseEntity.ok(updated);
+    }
+
+    //비밀번호 변경
+    @PatchMapping("/me/password")
+    public ResponseEntity<Void> updatePassword(
+            @RequestBody changePasswordDto dto,
+            @AuthenticationPrincipal Jwt jwt) {
+
+        long userId = Long.parseLong(jwt.getSubject());  // 토큰 sub → userId
+        userService.changePassword(userId, dto);
+        return ResponseEntity.ok().build();
     }
 
 }
