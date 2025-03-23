@@ -1,6 +1,6 @@
 package com.bananackck.community_1._feature.user;
 
-import com.bananackck.community_1._feature.post.entity.Comment;
+import com.bananackck.community_1._feature.comment.Comment;
 import com.bananackck.community_1._feature.post.entity.Post;
 import jakarta.persistence.*;
 import lombok.*;
