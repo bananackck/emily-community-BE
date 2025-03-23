@@ -30,5 +30,10 @@ public class CommentDto {
     public static class CreateCommentDto {
         private String text;
     }
+    @Data
+    @Builder
+    public static class UpdateCommentDto {
+        private String text;
+    }
 }
 

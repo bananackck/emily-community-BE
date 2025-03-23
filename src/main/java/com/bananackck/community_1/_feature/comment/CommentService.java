@@ -60,4 +60,21 @@ public class CommentService {
         commentRepository.delete(comment);
     }
 
+    //댓글 수정
+    @Transactional
+    public CommentDto.ViewCommentDto updateComment(Long postId, Long commentId, Long userId, CommentDto.UpdateCommentDto req) {
+        Comment comment = commentRepository.findByIdAndPostId(commentId, postId)
+                .orElseThrow(() -> new EntityNotFoundException("Comment not found"));
+
+        if (!comment.getUser().getId().equals(userId)) {
+            throw new AccessDeniedException("댓글 수정 권한이 없습니다.");
+        }
+        if (req.getText() != null && !req.getText().isBlank()) {
+            comment.setText(req.getText());
+        }
+
+        return CommentDto.fromEntity(comment);
+    }
+
+
 }

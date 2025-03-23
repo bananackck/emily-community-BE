@@ -56,4 +56,16 @@ public class CommentController {
     }
 
     //댓글 수정
+    @PatchMapping("/comments/{commentId}")
+    public ResponseEntity<CommentDto.ViewCommentDto> updateComment(
+            @PathVariable Long postId,
+            @PathVariable Long commentId,
+            @RequestBody CommentDto.UpdateCommentDto req,
+            @AuthenticationPrincipal Jwt jwt) {
+
+        Long userId = Long.valueOf(jwt.getSubject());
+        CommentDto.ViewCommentDto updated = commentService.updateComment(postId, commentId, userId, req);
+        return ResponseEntity.ok(updated);
+    }
+
 }
