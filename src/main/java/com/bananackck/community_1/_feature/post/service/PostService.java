@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -132,6 +133,18 @@ public class PostService {
                 .text(updated.getText())
                 .img(updated.getImg())
                 .build();
+    }
+
+    //게시물 삭제
+    @Transactional
+    public void deletePost(Long postId, Long userId) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new EntityNotFoundException("Post not found with id=" + postId));
+
+        if(!Objects.equals(post.getUser().getId(), userId)){
+            throw new IllegalArgumentException("User is not the owner of the post");
+        }
+        postRepository.deleteById(postId);
     }
 
 }

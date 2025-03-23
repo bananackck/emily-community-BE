@@ -7,6 +7,8 @@ import com.bananackck.community_1._feature.post.dto.UpdatePostRequestDto;
 import com.bananackck.community_1._feature.post.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -52,5 +54,15 @@ public class PostController {
         PostDto updated = postService.updatePost(postId, request);
 
         return ResponseEntity.ok(updated);
+    }
+
+    //게시물 삭제
+    @DeleteMapping("/{postId}")
+    public ResponseEntity<Void> delete(
+            @PathVariable Long postId,
+            @AuthenticationPrincipal Jwt jwt) {
+        Long userId = Long.valueOf(jwt.getSubject());
+        postService.deletePost(postId, userId);
+        return ResponseEntity.noContent().build();
     }
 }
