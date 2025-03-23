@@ -43,6 +43,17 @@ public class CommentController {
         return ResponseEntity.created(location).body(created);
     }
 
+    //댓글 삭제
+    @DeleteMapping("/comments/{commentId}")
+    public ResponseEntity<Void> deleteComment(
+            @PathVariable Long postId,
+            @PathVariable Long commentId,
+            @AuthenticationPrincipal Jwt jwt) {
 
+        Long userId = Long.valueOf(jwt.getSubject());
+        commentService.deleteComment(postId, commentId, userId);
+        return ResponseEntity.noContent().build();
+    }
 
+    //댓글 수정
 }

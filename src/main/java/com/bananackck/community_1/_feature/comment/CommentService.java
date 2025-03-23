@@ -6,6 +6,7 @@ import com.bananackck.community_1._feature.user.User;
 import com.bananackck.community_1._feature.user.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -46,4 +47,17 @@ public class CommentService {
         Comment saved = commentRepository.save(comment);
         return CommentDto.fromEntity(saved);
     }
+
+    //댓글 삭제
+    @Transactional
+    public void deleteComment(Long postId, Long commentId, Long userId) {
+        Comment comment = commentRepository.findByIdAndPostId(commentId, postId)
+                .orElseThrow(() -> new EntityNotFoundException("Comment not found"));
+
+        if (!comment.getUser().getId().equals(userId)) {
+            throw new AccessDeniedException("삭제 권한이 없습니다.");
+        }
+        commentRepository.delete(comment);
+    }
+
 }
