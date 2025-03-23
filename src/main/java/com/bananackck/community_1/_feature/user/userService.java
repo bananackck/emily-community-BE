@@ -44,4 +44,11 @@ public class userService {
         user.setPassword(passwordEncoder.encode(dto.getNewPassword()));
     }
 
+    @Transactional
+    public void deleteAccount(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+        userRepository.delete(user);
+    }
+
 }
