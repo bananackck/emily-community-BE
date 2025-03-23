@@ -37,7 +37,7 @@ public class PostService {
             long commentCount = commentRepository.countByPostId(post.getId());
 
             return PostDto.builder()
-//                    .id(post.getId())
+                    .id(post.getId())
                     .title(post.getTitle())
                     .text(post.getText())
                     .createdAt(post.getCreatedAt())
@@ -60,7 +60,7 @@ public class PostService {
         // comment 리스트
         List<CommentDto.ViewCommentDto> commentDtos = post.getComments().stream().map(comment ->
                 CommentDto.ViewCommentDto.builder()
-//                        .id(comment.getId())
+                        .id(comment.getId())
                         .text(comment.getText())
                         .createdAt(comment.getCreatedAt())
                         .userNickname(comment.getUser() != null ? comment.getUser().getNickname() : null)
@@ -69,7 +69,7 @@ public class PostService {
         ).collect(Collectors.toList());
 
         return PostDetailDto.builder()
-//                .id(post.getId())
+                .id(post.getId())
                 .title(post.getTitle())
                 .text(post.getText())
                 .createdAt(post.getCreatedAt())
