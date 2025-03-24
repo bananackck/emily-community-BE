@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.web.server.ResponseStatusException;
+
 import java.util.Map;
 
 @ControllerAdvice
@@ -15,7 +17,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Map<String, Object>> handleNotFound(EntityNotFoundException ex) {
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
-                .body(Map.of("message", ex.getMessage()));
+                .body(Map.of("message", "🚨404 NOT FOUND. 페이지가 존재하지 않습니다."));
     }
 
     @ExceptionHandler(Exception.class)
@@ -23,8 +25,16 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(Map.of(
-                        "message", "서버 오류",
+                        "message", "🚨500. 서버 오류",
                         "details", ex.getMessage()
                 ));
+    }
+
+    @ExceptionHandler(ResponseStatusException.class)
+    public ResponseEntity<Map<String, String>> handleConflict(ResponseStatusException ex) {
+        return ResponseEntity
+                .status(ex.getStatusCode())
+                .body(Map.of("message", "🚨409. 충돌하는 데이터가 존재합니다.",
+                        "details", ex.getReason()));
     }
 }

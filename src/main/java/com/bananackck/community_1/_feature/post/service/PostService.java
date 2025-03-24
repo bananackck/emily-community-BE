@@ -29,6 +29,7 @@ public class PostService {
     private final CommentRepository commentRepository;
     private final UserRepository userRepository;
 
+    //게시물 목록 조회
     public List<PostDto> findAll() {
         List<Post> posts = postRepository.findAll();
 
@@ -50,11 +51,13 @@ public class PostService {
         }).collect(Collectors.toList());
     }
 
+    //게시물 상세 조회
     @Transactional
     public PostDetailDto findDetailById(long postId, long userId) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new EntityNotFoundException("Post not found with id=" + postId));
 
+        post.setViewCount(post.getViewCount() != null ? post.getViewCount()+1 : 0L);
         long likeCount = postLikeRepository.countByPostId(post.getId());
 
         // comment 리스트
@@ -95,6 +98,7 @@ public class PostService {
                 .user(user)
                 .title(req.getTitle())
                 .text(req.getText())
+                .img(req.getImg())
                 .build();
 
         post.setCreatedAt(LocalDateTime.now());
