@@ -6,6 +6,7 @@ import com.bananackck.community_1._feature.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -59,5 +60,10 @@ public class authService {
                 .build();
 
         return userRepository.save(user);
+    }
+
+    public User loadUserById(Long id) throws UsernameNotFoundException {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + id));
     }
 }

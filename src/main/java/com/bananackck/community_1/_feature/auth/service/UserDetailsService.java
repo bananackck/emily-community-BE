@@ -19,4 +19,5 @@ public class UserDetailsService implements org.springframework.security.core.use
                 .orElseThrow(() -> new UsernameNotFoundException("User not found: " + email));
         return new UserPrincipal(user);
     }
+
 }

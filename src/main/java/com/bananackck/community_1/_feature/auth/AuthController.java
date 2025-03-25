@@ -1,6 +1,7 @@
 package com.bananackck.community_1._feature.auth;
 
 import com.bananackck.community_1._feature.auth.dto.*;
+import com.bananackck.community_1._feature.auth.service.UserDetailsService;
 import com.bananackck.community_1._feature.auth.service.authService;
 import com.bananackck.community_1._feature.user.User;
 import com.bananackck.community_1.util.JwtUtil;
@@ -24,7 +25,9 @@ public class AuthController {
     private final AuthenticationManager authManager;
     private final JwtUtil jwtUtil;
     private final authService authService;
+    private final UserDetailsService userDetailsService;
 
+    //로그인
     @PostMapping("/login")
     public ResponseEntity<LoginDto.LoginResponse> login(@RequestBody LoginDto.LoginRequest req) {
         Authentication authentication = authManager.authenticate(
@@ -34,9 +37,14 @@ public class AuthController {
         UserPrincipal principal = (UserPrincipal) authentication.getPrincipal();
         String token = jwtUtil.generateToken(principal.getId().toString());
 
+        User user = authService.loadUserById(principal.getId());
         return ResponseEntity.ok(
                 LoginDto.LoginResponse.builder()
                         .token(token)
+                        .userId(principal.getId())
+                        .nickname(user.getNickname())
+                        .profileImg(user.getProfilePicture())
+                        .email(user.getEmail())
                         .build()
         );
     }

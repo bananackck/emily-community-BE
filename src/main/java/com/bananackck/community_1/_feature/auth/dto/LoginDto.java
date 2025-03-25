@@ -18,5 +18,9 @@ public class LoginDto {
     @AllArgsConstructor
     public static class LoginResponse {
         private String token;
+        private Long userId;
+        private String nickname;
+        private String profileImg;
+        private String email;
     }
 }
