@@ -63,7 +63,7 @@ public class PostController {
 
 
     //게시물 수정
-    @PatchMapping("/{postId}")
+    @PatchMapping(value="/{postId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<PostDto> updatePost(
             @PathVariable Long postId,
             @RequestPart("data") UpdatePostRequestDto request,

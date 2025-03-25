@@ -26,7 +26,7 @@ public class CommentController {
 
     //댓글 생성
     @PostMapping("/comments")
-    public ResponseEntity<CommentDto.ViewCommentDto> createComment(
+    public List<CommentDto.ViewCommentDto> createComment(
             @PathVariable Long postId,
             @RequestBody CommentDto.CreateCommentDto req,
             @AuthenticationPrincipal Jwt jwt) {
@@ -40,19 +40,20 @@ public class CommentController {
                 .buildAndExpand(created.getId())
                 .toUri();
 
-        return ResponseEntity.created(location).body(created);
+        return commentService.findAllByPostId(postId);
+//        return ResponseEntity.created(location).body(created);
     }
 
     //댓글 삭제
     @DeleteMapping("/comments/{commentId}")
-    public ResponseEntity<Void> deleteComment(
+    public List<CommentDto.ViewCommentDto> deleteComment(
             @PathVariable Long postId,
             @PathVariable Long commentId,
             @AuthenticationPrincipal Jwt jwt) {
 
         Long userId = Long.valueOf(jwt.getSubject());
         commentService.deleteComment(postId, commentId, userId);
-        return ResponseEntity.noContent().build();
+        return commentService.findAllByPostId(postId);
     }
 
     //댓글 수정

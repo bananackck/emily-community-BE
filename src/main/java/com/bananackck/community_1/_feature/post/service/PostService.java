@@ -157,17 +157,22 @@ public class PostService {
                 .orElseThrow(() -> new EntityNotFoundException("User not found: " + userId));
 
 
+        log.info("🔎req.getTitle()={}", req.getTitle());
         if (req.getTitle() != null) post.setTitle(req.getTitle());
         if (req.getText() != null) post.setText(req.getText());
 
-        // 이미지 업로드
-        String uploadPath = Paths.get(uploadDir).toAbsolutePath().toString();
+        log.info("🔎" + imgFile);
+        if(imgFile!=null){
+            // 이미지 업로드
+            String uploadPath = Paths.get(uploadDir).toAbsolutePath().toString();
 
-        // 파일명 난수화
-        String imgFileNameEncrypt = UUID.randomUUID() + "_" + StringUtils.cleanPath(imgFile.getOriginalFilename());
-        File dest = new File(uploadPath, imgFileNameEncrypt);
-        imgFile.transferTo(dest);
-        String fileUrl = "/assets/img/data/" + imgFileNameEncrypt;
+            // 파일명 난수화
+            String imgFileNameEncrypt = UUID.randomUUID() + "_" + StringUtils.cleanPath(imgFile.getOriginalFilename());
+            File dest = new File(uploadPath, imgFileNameEncrypt);
+            imgFile.transferTo(dest);
+            String fileUrl = "/assets/img/data/" + imgFileNameEncrypt;
+            post.setImg(fileUrl);
+        }
         Post updated = postRepository.save(post);
 
         long likeCount = postLikeRepository.countByPostId(updated.getId());
