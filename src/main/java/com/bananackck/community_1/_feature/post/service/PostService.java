@@ -40,9 +40,6 @@ public class PostService {
     private final PostLikeRepository postLikeRepository;
     private final CommentRepository commentRepository;
     private final UserRepository userRepository;
-
-    @Value("${file.upload-dir}")
-    private String uploadDir;
     //게시물 목록 조회
     public List<PostDto> findAll() {
         List<Post> posts = postRepository.findAll();
@@ -102,7 +99,8 @@ public class PostService {
                 .build();
     }
 
-
+    @Value("${file.upload-dir}")
+    private String uploadDir;
     //게시글 생성
     @Transactional
     public PostDto createPost(CreatePostRequestDto req, Long userId, MultipartFile imgFile) throws IOException {
@@ -114,10 +112,10 @@ public class PostService {
 
         // 파일명 난수화
         String imgFileNameEncrypt = UUID.randomUUID() + "_" + StringUtils.cleanPath(imgFile.getOriginalFilename());
-
         File dest = new File(uploadPath, imgFileNameEncrypt);
         imgFile.transferTo(dest);
         String fileUrl = "/assets/img/data/" + imgFileNameEncrypt;
+
         Post post = Post.builder()
                 .user(user)
                 .title(req.getTitle())
@@ -149,24 +147,43 @@ public class PostService {
 
     //게시물 수정
     @Transactional
-    public PostDto updatePost(Long postId, Long userId, UpdatePostRequestDto req) {
+    public PostDto updatePost(Long postId, Long userId, UpdatePostRequestDto req, MultipartFile imgFile) throws IOException {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new EntityNotFoundException("Post not found with id=" + postId));
         if(!Objects.equals(post.getUser().getId(), userId)){
             throw new IllegalArgumentException("User is not the owner of the post");
         }
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found: " + userId));
+
 
         if (req.getTitle() != null) post.setTitle(req.getTitle());
         if (req.getText() != null) post.setText(req.getText());
-        if (req.getImg() != null) post.setImg(req.getImg());
 
+        // 이미지 업로드
+        String uploadPath = Paths.get(uploadDir).toAbsolutePath().toString();
+
+        // 파일명 난수화
+        String imgFileNameEncrypt = UUID.randomUUID() + "_" + StringUtils.cleanPath(imgFile.getOriginalFilename());
+        File dest = new File(uploadPath, imgFileNameEncrypt);
+        imgFile.transferTo(dest);
+        String fileUrl = "/assets/img/data/" + imgFileNameEncrypt;
         Post updated = postRepository.save(post);
 
+        long likeCount = postLikeRepository.countByPostId(updated.getId());
+        long commentCount = commentRepository.countByPostId(updated.getId());
+
         return PostDto.builder()
-//                .id(updated.getId())
+                .id(updated.getId())
                 .title(updated.getTitle())
                 .text(updated.getText())
                 .img(updated.getImg())
+                .likeCount(likeCount)
+                .createdAt(updated.getCreatedAt())
+                .viewCount(updated.getViewCount())
+                .commentCount(commentCount)
+                .userNickname(user.getNickname())
+                .userProfileImg(user.getProfilePicture())
                 .build();
     }
 

@@ -6,6 +6,7 @@ import com.bananackck.community_1._feature.post.dto.PostDto;
 import com.bananackck.community_1._feature.post.dto.UpdatePostRequestDto;
 import com.bananackck.community_1._feature.post.service.PostService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -18,6 +19,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/posts")
 @RequiredArgsConstructor
@@ -64,10 +66,11 @@ public class PostController {
     @PatchMapping("/{postId}")
     public ResponseEntity<PostDto> updatePost(
             @PathVariable Long postId,
-            @RequestBody UpdatePostRequestDto request,
-            @AuthenticationPrincipal Jwt jwt) {
+            @RequestPart("data") UpdatePostRequestDto request,
+            @RequestPart(value = "file", required = false) MultipartFile file,
+            @AuthenticationPrincipal Jwt jwt) throws IOException {
         Long userId = Long.valueOf(jwt.getSubject());
-        PostDto updated = postService.updatePost(postId, userId, request);
+        PostDto updated = postService.updatePost(postId, userId, request, file);
 
         return ResponseEntity.ok(updated);
     }

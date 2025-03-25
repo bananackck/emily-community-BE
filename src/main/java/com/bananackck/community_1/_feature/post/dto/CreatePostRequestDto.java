@@ -7,5 +7,4 @@ import org.springframework.web.multipart.MultipartFile;
 public class CreatePostRequestDto {
     private String title;
     private String text;
-//    private MultipartFile img;
 }

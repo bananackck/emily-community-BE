@@ -8,5 +8,4 @@ import lombok.Data;
 public class UpdatePostRequestDto {
     private String title;
     private String text;
-    private String img;
 }

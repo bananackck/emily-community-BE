@@ -6,11 +6,14 @@ import com.bananackck.community_1._feature.user.User;
 import com.bananackck.community_1.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.*;
 
 @RestController
@@ -38,10 +41,13 @@ public class AuthController {
         );
     }
 
+    //회원가입
+    @PostMapping(value="/signup", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Map<String, String>> signup(
+            @RequestPart("data") signupDto req,
+            @RequestPart(value = "file", required = false) MultipartFile file) throws IOException {
+        User saved = authService.signup(req, file);
 
-    @PostMapping("/signup")
-    public ResponseEntity<Map<String, String>> signup(@RequestBody signupDto req) {
-        User saved = authService.signup(req);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(Map.of("message", "회원가입 성공", "userId", saved.getId().toString()));
