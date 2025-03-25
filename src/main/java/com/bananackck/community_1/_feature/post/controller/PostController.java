@@ -6,12 +6,15 @@ import com.bananackck.community_1._feature.post.dto.PostDto;
 import com.bananackck.community_1._feature.post.dto.UpdatePostRequestDto;
 import com.bananackck.community_1._feature.post.service.PostService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.io.IOException;
 import java.net.URI;
 import java.util.List;
 
@@ -38,12 +41,14 @@ public class PostController {
     }
 
     //게시물 생성
-    @PostMapping
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<PostDto> createPost(
-            @RequestBody CreatePostRequestDto request,
-            @AuthenticationPrincipal Jwt jwt) {
+            @RequestPart("data") CreatePostRequestDto request,
+            @RequestPart(value = "file", required = false) MultipartFile file,
+            @AuthenticationPrincipal Jwt jwt) throws IOException {
+
         Long userId = Long.valueOf(jwt.getSubject());
-        PostDto created = postService.createPost(request,userId);
+        PostDto created = postService.createPost(request, userId, file);
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
@@ -53,6 +58,7 @@ public class PostController {
 
         return ResponseEntity.created(location).body(created);
     }
+
 
     //게시물 수정
     @PatchMapping("/{postId}")

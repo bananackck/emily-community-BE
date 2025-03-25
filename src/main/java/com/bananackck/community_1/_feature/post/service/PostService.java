@@ -13,14 +13,26 @@ import com.bananackck.community_1._feature.post.repository.PostRepository;
 import com.bananackck.community_1._feature.user.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class PostService {
@@ -29,6 +41,8 @@ public class PostService {
     private final CommentRepository commentRepository;
     private final UserRepository userRepository;
 
+    @Value("${file.upload-dir}")
+    private String uploadDir;
     //게시물 목록 조회
     public List<PostDto> findAll() {
         List<Post> posts = postRepository.findAll();
@@ -76,6 +90,7 @@ public class PostService {
                 .id(post.getId())
                 .title(post.getTitle())
                 .text(post.getText())
+                .img(post.getImg())
                 .createdAt(post.getCreatedAt())
                 .viewCount(post.getViewCount() != null ? post.getViewCount() : 0L)
                 .likeCount(likeCount)
@@ -90,15 +105,24 @@ public class PostService {
 
     //게시글 생성
     @Transactional
-    public PostDto createPost(CreatePostRequestDto req, Long userId) {
+    public PostDto createPost(CreatePostRequestDto req, Long userId, MultipartFile imgFile) throws IOException {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found: " + userId));
 
+        // 이미지 업로드
+        String uploadPath = Paths.get(uploadDir).toAbsolutePath().toString();
+
+        // 파일명 난수화
+        String imgFileNameEncrypt = UUID.randomUUID() + "_" + StringUtils.cleanPath(imgFile.getOriginalFilename());
+
+        File dest = new File(uploadPath, imgFileNameEncrypt);
+        imgFile.transferTo(dest);
+        String fileUrl = "/assets/img/data/" + imgFileNameEncrypt;
         Post post = Post.builder()
                 .user(user)
                 .title(req.getTitle())
                 .text(req.getText())
-                .img(req.getImg())
+                .img(fileUrl)
                 .build();
 
         post.setCreatedAt(LocalDateTime.now());
@@ -113,6 +137,7 @@ public class PostService {
                 .id(saved.getId())
                 .title(saved.getTitle())
                 .text(saved.getText())
+                .img(saved.getImg())
                 .likeCount(likeCount)
                 .createdAt(saved.getCreatedAt())
                 .viewCount(saved.getViewCount())
