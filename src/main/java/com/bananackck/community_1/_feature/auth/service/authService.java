@@ -36,11 +36,14 @@ public class authService {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "NICKNAME_CONFLICT");
         }
 
+        User user = User.builder()
+                .email(req.getEmail())
+                .password(passwordEncoder.encode(req.getPassword()))
+                .nickname(req.getNickname())
+                .build();
+
         String fileUrl;
-        if(imgFile.isEmpty()){
-            fileUrl="assets/img/data/profile-basic.png";
-        }
-        else {
+        if(imgFile!=null){
             // 이미지 업로드
             String uploadPath = Paths.get(uploadDir).toAbsolutePath().toString();
 
@@ -50,14 +53,12 @@ public class authService {
             File dest = new File(uploadPath, imgFileNameEncrypt);
             imgFile.transferTo(dest);
             fileUrl = "/assets/img/data/" + imgFileNameEncrypt;
+            user.setProfilePicture(fileUrl);
         }
-
-        User user = User.builder()
-                .email(req.getEmail())
-                .password(passwordEncoder.encode(req.getPassword()))
-                .nickname(req.getNickname())
-                .profilePicture(fileUrl)
-                .build();
+        else{
+            fileUrl="/assets/img/data/profile-basic.png";
+            user.setProfilePicture(fileUrl);
+        }
 
         return userRepository.save(user);
     }

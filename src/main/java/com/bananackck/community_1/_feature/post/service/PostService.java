@@ -126,7 +126,7 @@ public class PostService {
             File dest = new File(uploadPath, imgFileNameEncrypt);
             imgFile.transferTo(dest);
             String fileUrl = "/assets/img/data/" + imgFileNameEncrypt;
-            post.setText(fileUrl);
+            post.setImg(fileUrl);
         }
 
         Post saved = postRepository.save(post);
