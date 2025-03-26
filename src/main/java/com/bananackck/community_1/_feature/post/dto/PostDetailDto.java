@@ -21,6 +21,7 @@ public class PostDetailDto {
 
     private Long commentCount;
 
+    private Long userId;
     private String userNickname;
     private String userProfileImg;
     private List<CommentDto.ViewCommentDto> comments;

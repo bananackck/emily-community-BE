@@ -40,6 +40,7 @@ public class PostService {
     private final PostLikeRepository postLikeRepository;
     private final CommentRepository commentRepository;
     private final UserRepository userRepository;
+
     //게시물 목록 조회
     public List<PostDto> findAll() {
         List<Post> posts = postRepository.findAll();
@@ -93,6 +94,7 @@ public class PostService {
                 .likeCount(likeCount)
                 .isLiked(liked)
                 .commentCount((long) commentDtos.size())
+                .userId(post.getUser() != null ? post.getUser().getId() : null)
                 .userNickname(post.getUser() != null ? post.getUser().getNickname() : null)
                 .userProfileImg(post.getUser() != null ? post.getUser().getProfilePicture() : null)
                 .comments(commentDtos)
