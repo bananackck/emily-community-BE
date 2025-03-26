@@ -30,6 +30,7 @@ public class userService {
     @Value("${file.upload-dir}")
     private String uploadDir;
 
+    //닉네임과 프로필 사진 변
     @Transactional
     public userDto updateProfile(long userId, userUpdateDto req, MultipartFile imgFile) throws IOException {
         User user = userRepository.findById(userId)
@@ -59,19 +60,28 @@ public class userService {
                 .userId(updated.getId())
                 .build();
     }
+
+    //비밀번호 변경
     @Transactional
-    public void changePassword(Long userId, changePasswordDto dto) {
+    public changePasswordDto.response changePassword(Long userId, changePasswordDto.request dto) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
 
-        //TODO
+//        //현재 비밀번호 맞는지 확인
 //        if (!passwordEncoder.matches(dto.getCurrentPassword(), user.getPassword())) {
 //            throw new IllegalArgumentException("현재 비밀번호가 일치하지 않습니다.");
 //        }
 
         user.setPassword(passwordEncoder.encode(dto.getNewPassword()));
+
+        User updated = userRepository.save(user);
+        log.info("🔎updated={}", updated.getPassword());
+        return changePasswordDto.response.builder()
+                .token(updated.getPassword())
+                .build();
     }
 
+    //회원탈퇴
     @Transactional
     public void deleteAccount(Long userId) {
         User user = userRepository.findById(userId)

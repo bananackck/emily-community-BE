@@ -1,10 +1,22 @@
 package com.bananackck.community_1._feature.user.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 
-@Data
+
 public class changePasswordDto {
     //TODO
-    //private String currentPassword;
-    private String newPassword;
+    @Data
+    public static class request{
+//        private String currentPassword;
+        private String newPassword;
+    }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    public static class response{
+        private String token;
+    }
 }

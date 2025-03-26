@@ -37,13 +37,14 @@ public class UserController {
 
     //비밀번호 변경
     @PatchMapping("/me/password")
-    public ResponseEntity<Void> updatePassword(
-            @RequestBody changePasswordDto dto,
+    public ResponseEntity<changePasswordDto.response> updatePassword(
+            @RequestBody changePasswordDto.request dto,
             @AuthenticationPrincipal Jwt jwt) {
+        log.info("hello");
 
         long userId = Long.parseLong(jwt.getSubject());  // 토큰 sub → userId
-        userService.changePassword(userId, dto);
-        return ResponseEntity.ok().build();
+        changePasswordDto.response response = userService.changePassword(userId, dto);
+        return ResponseEntity.ok(response);
     }
 
     //회원탈퇴
