@@ -6,6 +6,7 @@ import com.bananackck.community_1._feature.user.dto.userDto;
 import com.bananackck.community_1._feature.user.dto.userUpdateDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -14,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.io.File;
 import java.io.IOException;
@@ -30,13 +32,24 @@ public class userService {
     @Value("${file.upload-dir}")
     private String uploadDir;
 
-    //닉네임과 프로필 사진 변
+    //닉네임과 프로필 사진 변경
     @Transactional
     public userDto updateProfile(long userId, userUpdateDto req, MultipartFile imgFile) throws IOException {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found: " + userId));
 
-        if(req.getNickname()!=null) user.setNickname(req.getNickname());
+        String newNickname = req.getNickname();
+        log.info(newNickname);
+        log.info(user.getNickname());
+
+        if(newNickname==null)
+            throw new IllegalArgumentException("🚨nickname is null");
+        else if(newNickname.equals(user.getNickname()))
+            user.setNickname(newNickname);
+        else if(userRepository.existsByNickname(newNickname))
+            throw new ResponseStatusException(HttpStatus.CONFLICT,"🚨이미 존재하는 닉네임입니다.");
+        else
+            user.setNickname(newNickname);
         if(imgFile!=null){
             // 이미지 업로드
             String uploadPath = Paths.get(uploadDir).toAbsolutePath().toString();

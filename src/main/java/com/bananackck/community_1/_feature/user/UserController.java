@@ -40,7 +40,6 @@ public class UserController {
     public ResponseEntity<changePasswordDto.response> updatePassword(
             @RequestBody changePasswordDto.request dto,
             @AuthenticationPrincipal Jwt jwt) {
-        log.info("hello");
 
         long userId = Long.parseLong(jwt.getSubject());  // 토큰 sub → userId
         changePasswordDto.response response = userService.changePassword(userId, dto);
