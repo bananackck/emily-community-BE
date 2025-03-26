@@ -109,24 +109,25 @@ public class PostService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found: " + userId));
 
-        // 이미지 업로드
-        String uploadPath = Paths.get(uploadDir).toAbsolutePath().toString();
-
-        // 파일명 난수화
-        String imgFileNameEncrypt = UUID.randomUUID() + "_" + StringUtils.cleanPath(imgFile.getOriginalFilename());
-        File dest = new File(uploadPath, imgFileNameEncrypt);
-        imgFile.transferTo(dest);
-        String fileUrl = "/assets/img/data/" + imgFileNameEncrypt;
-
         Post post = Post.builder()
                 .user(user)
                 .title(req.getTitle())
                 .text(req.getText())
-                .img(fileUrl)
+                .createdAt(LocalDateTime.now())
+                .viewCount(0L)
                 .build();
 
-        post.setCreatedAt(LocalDateTime.now());
-        post.setViewCount(0L);
+        if(imgFile!=null && !imgFile.isEmpty()) {
+            // 이미지 업로드
+            String uploadPath = Paths.get(uploadDir).toAbsolutePath().toString();
+
+            // 파일명 난수화
+            String imgFileNameEncrypt = UUID.randomUUID() + "_" + StringUtils.cleanPath(imgFile.getOriginalFilename());
+            File dest = new File(uploadPath, imgFileNameEncrypt);
+            imgFile.transferTo(dest);
+            String fileUrl = "/assets/img/data/" + imgFileNameEncrypt;
+            post.setText(fileUrl);
+        }
 
         Post saved = postRepository.save(post);
 
@@ -164,7 +165,7 @@ public class PostService {
         if (req.getText() != null) post.setText(req.getText());
 
         log.info("🔎" + imgFile);
-        if(imgFile!=null){
+        if(imgFile!=null && !imgFile.isEmpty()){
             // 이미지 업로드
             String uploadPath = Paths.get(uploadDir).toAbsolutePath().toString();
 
