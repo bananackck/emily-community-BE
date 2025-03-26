@@ -17,7 +17,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Map<String, Object>> handleNotFound(EntityNotFoundException ex) {
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
-                .body(Map.of("message", "🚨404 NOT FOUND. 페이지가 존재하지 않습니다."));
+                .body(Map.of("message", "🚨404 NOT FOUND. 페이지가 존재하지 않습니다.", "err",ex));
     }
 
     @ExceptionHandler(Exception.class)

@@ -7,6 +7,9 @@ import lombok.Data;
 @Data
 @Builder
 @AllArgsConstructor
-public class userUpdateDto {
+public class userDto {
     private String nickname;
+    private String email;
+    private String img;
+    private Long userId;
 }
