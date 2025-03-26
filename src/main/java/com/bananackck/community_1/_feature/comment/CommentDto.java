@@ -11,6 +11,7 @@ public class CommentDto {
         private Long id;
         private String text;
         private LocalDateTime createdAt;
+        private Long userId;
         private String userNickname;
         private String userProfileImg;
     }
@@ -20,6 +21,7 @@ public class CommentDto {
                 .id(comment.getId())
                 .text(comment.getText())
                 .createdAt(comment.getCreatedAt())
+                .userId(comment.getUser() != null ? comment.getUser().getId() : null)
                 .userNickname(comment.getUser() != null ? comment.getUser().getNickname() : null)
                 .userProfileImg(comment.getUser() != null ? comment.getUser().getProfilePicture() : null)
                 .build();
