@@ -32,7 +32,14 @@ public class PostLikeService {
 
         // 이미 좋아요가 있는지 확인
         if (postLikeRepository.existsByUserIdAndPostId(userId, postId)) {
-            throw new IllegalStateException("이미 좋아요를 누른 게시물입니다.");
+            deleteLike(postId, userId);
+            return LikeDto.builder()
+                    .likeCount(postLikeRepository.countByPostId(postId))
+                    .postId(postId)
+                    .userId(userId)
+                    .build();
+//            return
+//            throw new IllegalStateException("이미 좋아요를 누른 게시물입니다.");
         }
 
         // 좋아요 생성
@@ -42,8 +49,10 @@ public class PostLikeService {
                 .build();
 
         postLikeRepository.save(like);
+        long likeCount = postLikeRepository.countByPostId(postId);
 
         return LikeDto.builder()
+                .likeCount(likeCount)
                 .postId(postId)
                 .userId(userId)
                 .build();

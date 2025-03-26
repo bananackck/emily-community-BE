@@ -8,6 +8,7 @@ import lombok.Data;
 @Builder
 @AllArgsConstructor
 public class LikeDto {
+    private Long likeCount;
     private Long postId;
     private Long userId;
 }
