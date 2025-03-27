@@ -1,7 +1,7 @@
-# Community FE
+# Community BE
 
 Vanilla JavaScript + Spring Boot + MySQL 로 만든 **로컬 커뮤니티 게시판** 프로젝트입니다. 로그인, 회원가입, 게시글 CRUD, 댓글 작성, 프로필·비밀번호 수정, 회원 탈퇴 기능을 제공합니다.
-<br> 프론트엔드 파일입니다.
+<br> 백엔드 파일입니다.
 ---
 
 ## 📌 기술 스택
@@ -89,6 +89,9 @@ jwt.secret=###########################
 ▶ [http://localhost:8080](http://localhost:8080)
 
 ### 5️⃣ 프론트엔드 실행
+
+다음 깃헙 링크를 참고해주세요.
+https://github.com/bananackck/emily-community-FE.git
 
 VSCode → `src/pages` 폴더에서 **Live Server** 실행
 ▶ [http://127.0.0.1:5500/src/pages/login.html](http://127.0.0.1:5500/src/pages/login.html)
