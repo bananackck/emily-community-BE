@@ -34,7 +34,11 @@ Vanilla JavaScript + Spring Boot + MySQL 로 만든 **로컬 커뮤니티 게시
 ## 🚀 주요 페이지
 
 ![로그인](https://github.com/user-attachments/assets/b3875818-7d69-44ee-bca9-6767666d039f)
+![게시판](https://github.com/user-attachments/assets/255d5b07-527b-4085-a028-52ec54842227)
 
+상세한 기능 조작 동영상은 아래 링크를 참고해주세요.
+
+https://youtu.be/Toc_h0OYZ7E
 
 ---
 
